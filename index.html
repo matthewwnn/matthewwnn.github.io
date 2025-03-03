@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake, Pong, and Pac-Man Games</title>
+    <title>Classic Games: Snake, Pong, Pac-Man</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
             margin-top: 20px;
         }
         #games-container {
-            display: flex;
+            display: none;
             justify-content: space-around;
             width: 100%;
         }
@@ -24,20 +24,38 @@
             margin: 10px;
             text-align: center;
         }
+        #menu-container {
+            text-align: center;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Classic Games: Snake, Pong, and Pac-Man</h1>
+
+    <!-- Main Menu -->
+    <div id="menu-container">
+        <button onclick="startGame('snake')">Play Snake</button>
+        <button onclick="startGame('pong')">Play Pong</button>
+        <button onclick="startGame('pacman')">Play Pac-Man</button>
+    </div>
+
+    <!-- Games Container -->
     <div id="games-container">
-        <div class="game">
+        <div class="game" id="snake-game">
             <h2>Snake Game</h2>
             <canvas id="snakeCanvas" width="400" height="400"></canvas>
         </div>
-        <div class="game">
+        <div class="game" id="pong-game">
             <h2>Pong Game</h2>
             <canvas id="pongCanvas" width="400" height="400"></canvas>
         </div>
-        <div class="game">
+        <div class="game" id="pacman-game">
             <h2>Pac-Man Game</h2>
             <canvas id="pacmanCanvas" width="400" height="400"></canvas>
         </div>
@@ -119,9 +137,6 @@
             }
         };
 
-        window.addEventListener("keydown", (event) => snakeGame.changeDirection(event));
-        setInterval(() => snakeGame.update(), 100);
-
         // Pong Game
         const pongCanvas = document.getElementById("pongCanvas");
         const pongCtx = pongCanvas.getContext("2d");
@@ -202,14 +217,10 @@
             }
         };
 
-        window.addEventListener("keydown", (event) => pongGame.changeDirection(event));
-        setInterval(() => pongGame.update(), 1000 / 60);
-
         // Pac-Man Game - Basic Implementation
         const pacmanCanvas = document.getElementById("pacmanCanvas");
         const pacmanCtx = pacmanCanvas.getContext("2d");
 
-        // Simple Pac-Man drawing
         const pacmanGame = {
             pacman: { x: 200, y: 200, radius: 20, direction: 0 },
             update: function () {
@@ -247,8 +258,33 @@
             }
         };
 
-        window.addEventListener("keydown", (event) => pacmanGame.changeDirection(event));
-        setInterval(() => pacmanGame.update(), 1000 / 60);
+        // Show and hide games based on user selection
+        function startGame(game) {
+            // Hide menu
+            document.getElementById('menu-container').style.display = 'none';
+            // Show games container
+            document.getElementById('games-container').style.display = 'flex';
+
+            // Hide all games
+            document.getElementById('snake-game').style.display = 'none';
+            document.getElementById('pong-game').style.display = 'none';
+            document.getElementById('pacman-game').style.display = 'none';
+
+            // Show the selected game
+            if (game === 'snake') {
+                document.getElementById('snake-game').style.display = 'block';
+                window.addEventListener("keydown", (event) => snakeGame.changeDirection(event));
+                setInterval(() => snakeGame.update(), 100);
+            } else if (game === 'pong') {
+                document.getElementById('pong-game').style.display = 'block';
+                window.addEventListener("keydown", (event) => pongGame.changeDirection(event));
+                setInterval(() => pongGame.update(), 1000 / 60);
+            } else if (game === 'pacman') {
+                document.getElementById('pacman-game').style.display = 'block';
+                window.addEventListener("keydown", (event) => pacmanGame.changeDirection(event));
+                setInterval(() => pacmanGame.update(), 1000 / 60);
+            }
+        }
     </script>
 </body>
 </html>
